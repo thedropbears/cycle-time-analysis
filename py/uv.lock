@@ -452,6 +452,16 @@ wheels = [
 ]
 
 [[package]]
+name = "msvc-runtime"
+version = "14.42.34433"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/52/2d347af538cc267d14649520388c9c509f285e56ddb8dccb3bb2f0f3c76b/msvc_runtime-14.42.34433-cp313-cp313-win32.whl", hash = "sha256:7d1fc5675c3d9769b3f05b9a57156211a053415f0dab938493c2d490c84187a4", size = 1926963, upload-time = "2024-11-15T01:08:29.854Z" },
+    { url = "https://files.pythonhosted.org/packages/d4/9e/4ec666284e1b1f38384534780c59e506b20b5e8f05bad473712b48b61d26/msvc_runtime-14.42.34433-cp313-cp313-win_amd64.whl", hash = "sha256:087e2a7906b953970d93f37ea740605688eff616fa7ad42cc46e15137797e7e6", size = 1927398, upload-time = "2024-11-15T01:08:31.848Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/51/ab96fbd60ab68e07d11b456a18436120f0caf7146091f6ac39bbf99a7903/msvc_runtime-14.42.34433-cp313-cp313-win_arm64.whl", hash = "sha256:0d873db88d3027e3a9b2abf8b2104af96199a317f940802bce2d234dd4aa915c", size = 3228386, upload-time = "2024-11-15T01:08:33.868Z" },
+]
+
+[[package]]
 name = "mypy-extensions"
 version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -684,6 +694,7 @@ dependencies = [
     { name = "openai" },
     { name = "pandas" },
     { name = "plotly" },
+    { name = "robotpy-wpiutil" },
     { name = "seaborn" },
 ]
 
@@ -695,6 +706,7 @@ requires-dist = [
     { name = "openai", specifier = ">=1.95.1" },
     { name = "pandas", specifier = ">=2.3.1" },
     { name = "plotly", specifier = ">=6.2.0" },
+    { name = "robotpy-wpiutil", specifier = ">=2025.3.2.3" },
     { name = "seaborn", specifier = ">=0.13.2" },
 ]
 
@@ -852,6 +864,35 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/fe/0f/25911a9f080464c59fab9027482f822b86bf0608957a5fcc6eaac85aa515/PyYAML-6.0.2-cp313-cp313-musllinux_1_1_x86_64.whl", hash = "sha256:68ccc6023a3400877818152ad9a1033e3db8625d899c72eacb5a668902e4d652", size = 751597, upload-time = "2024-08-06T20:32:56.985Z" },
     { url = "https://files.pythonhosted.org/packages/14/0d/e2c3b43bbce3cf6bd97c840b46088a3031085179e596d4929729d8d68270/PyYAML-6.0.2-cp313-cp313-win32.whl", hash = "sha256:bc2fa7c6b47d6bc618dd7fb02ef6fdedb1090ec036abab80d4681424b84c1183", size = 140527, upload-time = "2024-08-06T20:33:03.001Z" },
     { url = "https://files.pythonhosted.org/packages/fa/de/02b54f42487e3d3c6efb3f89428677074ca7bf43aae402517bc7cca949f3/PyYAML-6.0.2-cp313-cp313-win_amd64.whl", hash = "sha256:8388ee1976c416731879ac16da0aff3f63b286ffdd57cdeb95f3f2e085687563", size = 156446, upload-time = "2024-08-06T20:33:04.33Z" },
+]
+
+[[package]]
+name = "robotpy-native-wpiutil"
+version = "2025.3.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "msvc-runtime", marker = "sys_platform == 'win32'" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/60/95/789ae7f9994836f410bccfd4cc199b38ac17fc668726c857fea4fc8ae76e/robotpy_native_wpiutil-2025.3.2-py3-none-macosx_13_0_universal2.whl", hash = "sha256:871cd5c62664620309e38f610551bce551aa8e7c607d500d51eda15e81340dea", size = 4129698, upload-time = "2025-05-21T04:13:50.351Z" },
+    { url = "https://files.pythonhosted.org/packages/10/d1/ed55040290ad7b2834fed44855e1718840dddd4a5d0c86420802ec1243d9/robotpy_native_wpiutil-2025.3.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:0794d841d4c1c87bc63d46544ce097f07dfee6da8d1266047644a36cd47eabf7", size = 2876853, upload-time = "2025-05-21T04:13:53.329Z" },
+    { url = "https://files.pythonhosted.org/packages/6c/bc/4a8658d7715723ff84f7724f69d8c83d3679b77ce9772c2bc0302ae2eb4d/robotpy_native_wpiutil-2025.3.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:3cc7e9e687b6a14d5371591f04edcf7e2e98cd093b358e70d0d51fcf8fd6a3aa", size = 2766902, upload-time = "2025-05-21T04:13:54.845Z" },
+    { url = "https://files.pythonhosted.org/packages/8b/ed/3b2ed5e44dc166d376af5aca6b6a78c066cde54829e5d1b10e20634a419c/robotpy_native_wpiutil-2025.3.2-py3-none-win_amd64.whl", hash = "sha256:577a050c3b5e210d2cc32881c4f1f92213fd4c74f02fa6fb8e9f8cc8f08b9f12", size = 3208633, upload-time = "2025-05-21T04:13:56.433Z" },
+]
+
+[[package]]
+name = "robotpy-wpiutil"
+version = "2025.3.2.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "robotpy-native-wpiutil" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e0/1f/e62b8e2aff15fb4b0951a114bafeab8380d03b6fac66d61080525ad0d8e5/robotpy_wpiutil-2025.3.2.3-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:6d8a9fe4c8a5547fe752c6190e3b2be2e048d981800d0dca6c6c90c0c9393dd1", size = 573460, upload-time = "2025-06-02T03:52:42.635Z" },
+    { url = "https://files.pythonhosted.org/packages/d4/2e/445e2d658f53c90337707be651ef6ad16361f687214e22ee5061961d8bef/robotpy_wpiutil-2025.3.2.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:8c5cb803248c3fac6d2d2aabfb0b8a9f10dc062ab6c0ad9abb79d6dda4e8c087", size = 587251, upload-time = "2025-06-02T03:52:43.897Z" },
+    { url = "https://files.pythonhosted.org/packages/db/0a/f3673da10f9be55168197ddda33331c2f549cb7d8a521006f13ceb69918a/robotpy_wpiutil-2025.3.2.3-cp313-cp313-manylinux_2_35_x86_64.whl", hash = "sha256:53cec827859a2818590ac994982ccfbbd61c222606e93a9aae4451db55726cd7", size = 626210, upload-time = "2025-06-02T03:52:45.182Z" },
+    { url = "https://files.pythonhosted.org/packages/88/ba/de130471fb7b456fc454d987f26b766a1e5adb38aaa86b57279e9a8c9679/robotpy_wpiutil-2025.3.2.3-cp313-cp313-manylinux_2_36_aarch64.whl", hash = "sha256:0d8ae7fec010b468aff6f1271230ba6834c7ba120b655a3ce640d9e012408740", size = 581019, upload-time = "2025-06-02T03:52:46.425Z" },
+    { url = "https://files.pythonhosted.org/packages/9f/85/f3eae4835279c0da654d93995ceb3ed44518eff3aa4914528d57a4892625/robotpy_wpiutil-2025.3.2.3-cp313-cp313-win_amd64.whl", hash = "sha256:bd5bf8958634c488e4e2e48c2e36d6d6f2fd7f77709448c2b87769d0b1e06583", size = 354993, upload-time = "2025-06-02T03:52:47.723Z" },
 ]
 
 [[package]]

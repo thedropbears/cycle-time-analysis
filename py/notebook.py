@@ -16,19 +16,81 @@ with app.setup:
 
 
 @app.cell
-def load_data():
-    """Load and parse the FRC robot log data"""
+def load_wpilog_data():
+    """Load and parse the FRC robot log data from wpilog file"""
+
     import pathlib
-    # Load the CSV file
-    df = pd.read_csv(pathlib.Path.home() / 'Documents/logs/FRC_20250629_041238_NSMAC_E2.csv', dtype={"Key": "category"}, parse_dates=False)
+    from wpiutil.log import DataLogReader, DataLogRecord
+
+    # Use the CSV filename pattern to derive the wpilog filename
+    log_file = pathlib.Path.home() / 'Documents/logs/FRC_20250629_041238_NSMAC_E2.wpilog'
+
+    def read_wpilog_to_dataframe(filename):
+        """Read wpilog file and convert to pandas DataFrame"""
+        data_records = []
+
+        reader = DataLogReader(str(filename))
+
+        if not reader.isValid():
+            raise ValueError(f"Invalid log file: {filename}")
+
+        entries = {}  # Maps entry ID to metadata
+
+        for record in reader:
+            if record.isStart():
+                # Store entry metadata
+                start_data = record.getStartData()
+                entries[start_data.entry] = start_data
+
+            elif not record.isControl():
+                # Process data record
+                entry_info = entries.get(record.getEntry(), None)
+                if entry_info is not None:
+                    timestamp = record.getTimestamp() / 1000000.0  # Convert to seconds
+
+                    # Extract value based on type
+                    try:
+                        if entry_info.type == "double":
+                            value = str(record.getDouble())
+                        elif entry_info.type == "float":
+                            value = str(record.getFloat())
+                        elif entry_info.type == "int64":
+                            value = str(record.getInteger())
+                        elif entry_info.type == "boolean":
+                            value = str(record.getBoolean())
+                        elif entry_info.type == "string":
+                            value = record.getString()
+                        elif entry_info.type == "json":
+                            value = record.getString()
+                        else:
+                            # For arrays or unknown types, convert to string
+                            value = str(record.getRaw())
+
+                        data_records.append({
+                            'Timestamp': timestamp,
+                            'Key': entry_info.name,
+                            'Value': value
+                        })
+                    except Exception as e:
+                        # Skip corrupted records
+                        continue
+
+        return pd.DataFrame(data_records)
+
+    df = read_wpilog_to_dataframe(log_file)
+
+    # Convert Key column to category for memory efficiency
+    df['Key'] = df['Key'].astype('category')
 
     mo.md(f"""
     ## Data Overview
 
+    **Log file:** `{log_file}`  
     **Total records:** {len(df):,}  
     **Columns:** {', '.join(df.columns)}  
     **Time range:** {df['Timestamp'].min():.2f}s to {df['Timestamp'].max():.2f}s  
-    **Duration:** {(df['Timestamp'].max() - df['Timestamp'].min()):.2f}s
+    **Duration:** {(df['Timestamp'].max() - df['Timestamp'].min()):.2f}s  
+    **Unique keys:** {df['Key'].nunique()}
     """)
 
     return (df,)
