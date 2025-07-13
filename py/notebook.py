@@ -23,7 +23,7 @@ def load_wpilog_data():
     from wpiutil.log import DataLogReader, DataLogRecord
 
     # Use the CSV filename pattern to derive the wpilog filename
-    log_file = pathlib.Path.home() / 'Documents/logs/FRC_20250629_041238_NSMAC_E2.wpilog'
+    log_file = pathlib.Path.home() / 'Documents/logs/FRC_20250712_232120_VIME_Q46.wpilog'
 
     def read_wpilog_to_dataframe(filename):
         """Read wpilog file and convert to pandas DataFrame"""
@@ -145,7 +145,7 @@ def calculate_cycles(events):
     last_shooting_time = None
 
     for _, event in events.iterrows():
-        if event['event_type'] == 'intake':
+        if event['event_type'] == 'intaking':
             if last_shooting_time is not None:
                 # Time from last shooting to this intake
                 cycles.append({
@@ -217,7 +217,7 @@ def create_timeline_plot(events):
     fig_timeline = go.Figure()
 
     # Add intake events
-    intake_events = events[events['event_type'] == 'intake']
+    intake_events = events[events['event_type'] == 'intaking']
     fig_timeline.add_trace(go.Scatter(
         x=intake_events['Timestamp'],
         y=[1] * len(intake_events),
