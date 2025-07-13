@@ -365,6 +365,16 @@ def performance_analysis(cycles_df, stats):
     # Performance summary
     performance_summary = cycles_df.groupby(['cycle_type', 'performance']).size().unstack(fill_value=0)
 
+    # Calculate success rates safely
+    def safe_success_rate(cycle_type):
+        if cycle_type not in performance_summary.index:
+            return 0.0
+        row = performance_summary.loc[cycle_type]
+        above = row.get('Above Average', 0)
+        below = row.get('Below Average', 0)
+        total = above + below
+        return (above / total * 100) if total > 0 else 0.0
+
     mo.md(f"""
     ## Performance Analysis
 
@@ -372,8 +382,8 @@ def performance_analysis(cycles_df, stats):
 
     | Cycle Type | Above Average | Below Average | Success Rate |
     |------------|---------------|---------------|--------------|
-    | **Intake → Shooting** | {performance_summary.loc['intake-to-shooting', 'Above Average'] if 'Above Average' in performance_summary.columns else 0} | {performance_summary.loc['intake-to-shooting', 'Below Average'] if 'Below Average' in performance_summary.columns else 0} | {(performance_summary.loc['intake-to-shooting', 'Above Average'] / (performance_summary.loc['intake-to-shooting', 'Above Average'] + performance_summary.loc['intake-to-shooting', 'Below Average']) * 100):.1f}% |
-    | **Shooting → Intake** | {performance_summary.loc['shooting-to-intake', 'Above Average'] if 'Above Average' in performance_summary.columns else 0} | {performance_summary.loc['shooting-to-intake', 'Below Average'] if 'Below Average' in performance_summary.columns else 0} | {(performance_summary.loc['shooting-to-intake', 'Above Average'] / (performance_summary.loc['shooting-to-intake', 'Above Average'] + performance_summary.loc['shooting-to-intake', 'Below Average']) * 100):.1f}% |
+    | **Intake → Shooting** | {performance_summary.loc['intake-to-shooting', 'Above Average'] if 'intake-to-shooting' in performance_summary.index and 'Above Average' in performance_summary.columns else 0} | {performance_summary.loc['intake-to-shooting', 'Below Average'] if 'intake-to-shooting' in performance_summary.index and 'Below Average' in performance_summary.columns else 0} | {safe_success_rate('intake-to-shooting'):.1f}% |
+    | **Shooting → Intake** | {performance_summary.loc['shooting-to-intake', 'Above Average'] if 'shooting-to-intake' in performance_summary.index and 'Above Average' in performance_summary.columns else 0} | {performance_summary.loc['shooting-to-intake', 'Below Average'] if 'shooting-to-intake' in performance_summary.index and 'Below Average' in performance_summary.columns else 0} | {safe_success_rate('shooting-to-intake'):.1f}% |
     """)
 
     return
@@ -404,10 +414,12 @@ def create_data_table(cycles_df):
         'performance': 'Performance'
     })
 
-    mo.md("""
+    mo.md(f"""
     ## Detailed Cycle Data
 
-    Complete breakdown of all cycles with performance indicators:
+    Complete breakdown of all {len(cycles_df)} cycles with performance indicators:
+
+    First 10 cycles:
     """)
 
     return
@@ -482,6 +494,7 @@ def export_data(cycles_df):
     {export_button}
 
     The exported file will contain all {len(cycles_df)} cycles with:
+
     - Cycle types and durations
     - Start and end times
     - Performance indicators
